@@ -16,6 +16,77 @@ body {
     padding: 20px;
 }
 
+.legal-disclaimer-banner {
+    max-width: 1400px;
+    margin: 0 auto 20px auto;
+    background: #fff3cd;
+    border-left: 4px solid #ff9800;
+    border-radius: 8px;
+    padding: 14px 18px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+    font-size: 13px;
+}
+
+.legal-disclaimer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.legal-disclaimer-title {
+    font-weight: bold;
+    color: #8a6d3b;
+}
+
+.legal-disclaimer-toggle {
+    background: #ff9800;
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.legal-disclaimer-toggle.open {
+    background: #e65100;
+}
+
+.legal-disclaimer-content {
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.legal-disclaimer-content.open {
+    opacity: 1;
+}
+
+.legal-disclaimer-content h2,
+.legal-disclaimer-content h3 {
+    margin: 8px 0 4px;
+    font-size: 14px;
+}
+
+.legal-disclaimer-content p {
+    margin-bottom: 6px;
+}
+
+.legal-disclaimer-content ul {
+    margin-left: 18px;
+    margin-bottom: 6px;
+}
+
+.legal-disclaimer-content li {
+    margin-bottom: 2px;
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;

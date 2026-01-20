@@ -554,6 +554,41 @@ window.addEventListener('DOMContentLoaded', function() {
     
     updateReceiptPreview();
     setYearlyDefaults();
+
+    // Disclaimer accordion toggle
+    const disclaimerContent = document.getElementById('legalDisclaimerContent');
+    const disclaimerToggleBtn = document.getElementById('disclaimerToggleBtn');
+    const disclaimerHeader = document.querySelector('.legal-disclaimer-header');
+
+    function toggleDisclaimer() {
+        if (!disclaimerContent || !disclaimerToggleBtn) return;
+        const isOpen = disclaimerContent.classList.toggle('open');
+
+        if (isOpen) {
+            disclaimerToggleBtn.classList.add('open');
+            disclaimerToggleBtn.textContent = 'Hide disclaimer';
+            disclaimerContent.style.maxHeight = disclaimerContent.scrollHeight + 'px';
+        } else {
+            disclaimerToggleBtn.classList.remove('open');
+            disclaimerToggleBtn.textContent = 'Read full disclaimer';
+            disclaimerContent.style.maxHeight = '0';
+        }
+    }
+
+    if (disclaimerToggleBtn) {
+        disclaimerToggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            toggleDisclaimer();
+        });
+    }
+
+    if (disclaimerHeader) {
+        disclaimerHeader.addEventListener('click', function(e) {
+            // Avoid double-toggle when clicking the button itself
+            if (e.target === disclaimerToggleBtn) return;
+            toggleDisclaimer();
+        });
+    }
 });
 
 // Auto-generate receipt number (optional enhancement)
