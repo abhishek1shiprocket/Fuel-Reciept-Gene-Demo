@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel Receipt Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- JSZip (for ZIP downloads) -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <!-- html2canvas (for PNG capture) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fuel Receipt Generator</h1>
+        
+        <div class="main-content">
+            <!-- Input Form -->
+            <div class="form-section">
+                <h2>Receipt Details</h2>
+                <form id="receiptForm">
+                    <div class="form-group">
+                        <label for="stationName">Station Name:</label>
+                        <input type="text" id="stationName" value="Rajasthan Rajpath Filling Station">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" value="Address Lock No 349, NH 8 Samalkha New Delhi - 110037">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="telNo">Tel No:</label>
+                            <input type="text" id="telNo" value="1503339">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="receiptNo">Receipt No:</label>
+                            <input type="text" id="receiptNo" value="159955">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fccId">FCC ID:</label>
+                            <input type="text" id="fccId" value="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fipNo">FIP NO:</label>
+                            <input type="text" id="fipNo" value="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nozzleNo">Nozzle No:</label>
+                            <input type="text" id="nozzleNo" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="product">Product:</label>
+                            <input type="text" id="product" value="Petrol">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ratePerLtr">Rate/Ltr:</label>
+                            <input type="number" id="ratePerLtr" step="0.01" value="94.72">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="amount">Amount:</label>
+                            <input type="number" id="amount" step="0.01" value="5000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="volume">Volume (LTR):</label>
+                            <input type="text" id="volume" value="52.79L">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="vehType">Vehicle Type:</label>
+                            <input type="text" id="vehType" value="Petrol">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vehNo">Vehicle No:</label>
+                            <input type="text" id="vehNo" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customerName">Customer Name:</label>
+                        <input type="text" id="customerName" value="">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date & Time:</label>
+                            <input type="text" id="date" value="2024-09-23 14:06">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mode">Payment Mode:</label>
+                            <select id="mode">
+                                <option value="Cash">Cash</option>
+                                <option value="Card">Card</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Wallet">Wallet</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="lstNo">LST NO:</label>
+                            <input type="text" id="lstNo" value="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="vatNo">VAT NO:</label>
+                            <input type="text" id="vatNo" value="">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="attendantId">Attendant ID:</label>
+                        <input type="text" id="attendantId" value="not available">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="generateBtn">Generate Receipt</button>
+                        <button type="button" id="printBtn">Print Receipt</button>
+                        <button type="button" id="clearBtn">Clear All</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Receipt Preview -->
+            <div class="receipt-section">
+                <h2>Receipt Preview</h2>
+                <div class="receipt-container">
+                    <!-- Template Type 2 - HDFC Bank -->
+                    <div id="receipt-type2" class="receipt receipt-type2" style="background-image: url(http://127.0.0.1:5002/static/fuel-side-logo.png);background-repeat: repeat-y;background-position: right;">
+                        <!-- HDFC Bank Left Panel with Repeating Logo Image -->
+                    
+                        <div class="receipt-content type2-content">
+                            <div class="logo-section type2-logo">
+                                <div class="indianoil-logo">
+                                    <img src="{{ url_for('static', filename='indian-oil.png') }}" alt="IndianOil Logo" class="main-logo" style="filter: grayscale(1);">
+                                </div>
+                               
+                                <div class="welcome">WELCOME!!!</div>
+                            </div>
+                            
+                            <div class="station-info">
+                                <div class="station-name" id="preview2-stationName">Rajasthan Rajpath Filling Station</div>
+                                <div class="station-address" id="preview2-address">Address Lock No 349, NH 8 Samalkha New Delhi - 110037</div>
+                            </div>
+                            
+                            <div class="receipt-details">
+                                <div class="detail-row">
+                                    <span class="label">TEL NO:</span>
+                                    <span class="value" id="preview2-telNo">1503339</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">RECEIPT NO:</span>
+                                    <span class="value" id="preview2-receiptNo">159955</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">FCC ID:</span>
+                                    <span class="value" id="preview2-fccId"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">FIP NO:</span>
+                                    <span class="value" id="preview2-fipNo"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">NOZZLE NO:</span>
+                                    <span class="value" id="preview2-nozzleNo"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">PRODUCT:</span>
+                                    <span class="value" id="preview2-product">Petrol</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">RATE/LTR:</span>
+                                    <span class="value" id="preview2-ratePerLtr">94.72</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">AMOUNT:</span>
+                                    <span class="value" id="preview2-amount">5000</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">VOLUME (LTR):</span>
+                                    <span class="value" id="preview2-volume">52.79 1+</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">VEH TYPE:</span>
+                                    <span class="value" id="preview2-vehType">Petrol</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">VEH NO:</span>
+                                    <span class="value" id="preview2-vehNo"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">CUSTOMER NAME:</span>
+                                    <span class="value" id="preview2-customerName"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">DATE:</span>
+                                    <span class="value" id="preview2-date">2024-09-23 14:06</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">MODE:</span>
+                                    <span class="value" id="preview2-mode">Cash</span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">LST NO:</span>
+                                    <span class="value" id="preview2-lstNo"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">VAT NO:</span>
+                                    <span class="value" id="preview2-vatNo"></span>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="label">ATTENDENT ID:</span>
+                                    <span class="value" id="preview2-attendantId">not available</span>
+                                </div>
+                            </div>
+                            
+                            <div class="receipt-footer">
+                                <div class="separator">******************</div>
+                                <div class="thank-you">THANK YOU! VISIT AGAIN</div>
+                                <div class="save-fuel">Save Fuel, Save Money.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Yearly Automation Section -->
+        <div class="yearly-section">
+            <h2>Yearly Receipt Automation</h2>
+            <form id="yearlyForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yearlyYear">Financial Year Ending (YYYY)</label>
+                        <input type="number" id="yearlyYear" min="2000" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyMonthlyCap">Monthly Total Cap (₹)</label>
+                        <input type="number" id="yearlyMonthlyCap" step="0.01" value="25000">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyMinAmount">Per-Receipt Min (₹)</label>
+                        <input type="number" id="yearlyMinAmount" step="0.01" value="3000">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyMaxAmount">Per-Receipt Max (₹)</label>
+                        <input type="number" id="yearlyMaxAmount" step="0.01" value="7000">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yearlyLocation">Fuel API Location (e.g. delhi)</label>
+                        <input type="text" id="yearlyLocation" value="delhi">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyApiKey">Fuel API Key</label>
+                        <input type="text" id="yearlyApiKey" placeholder="Enter X-Api-Key">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yearlyTelNo">Telephone No (for all receipts)</label>
+                        <input type="text" id="yearlyTelNo" placeholder="e.g. 0123456789">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyCustomerName">Customer Name (for all receipts)</label>
+                        <input type="text" id="yearlyCustomerName" placeholder="e.g. John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="yearlyVehNo">Vehicle No (for all receipts)</label>
+                        <input type="text" id="yearlyVehNo" placeholder="e.g. DL01AB1234">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="generateYearlyBtn">Generate Yearly Receipts</button>
+                    <button type="button" id="clearYearlyBtn">Clear Yearly Settings</button>
+                    <button type="button" id="downloadYearlyZipBtn">Download All Receipts (ZIP)</button>
+                </div>
+            </form>
+
+            <div id="yearlyResults" class="yearly-results">
+                <!-- Generated yearly receipts summary will be injected here -->
+            </div>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
